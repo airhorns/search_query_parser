@@ -1,0 +1,29 @@
+start = EOF / Definitions [\s]* EOF
+
+Definitions = [\s]* Definition ([\s]+ Definition)*
+Definition = MatchMode? (Pair / AnyWord)
+
+AnyWord = String
+Pair = BareWord ':' Operator? Attribute
+Attribute = AnyValue
+AnyValue = Date / Numeric / String
+
+Seperators = " "+ / (' '* [,|] ' '*)
+MultiValues = AnyValue (Seperators AnyValue)*
+GroupedValues = '(' MultiValues ')'
+
+MatchMode = '-' / '+'
+Numeric = Float / Integer
+String = DoubleQuotedString / SingleQuotedString / BareWord
+
+Operator = '<=' / '>=' / '<' / '>'
+
+BareWord = [^\s'"(:] [^ "):]*
+DoubleQuotedString = '"' [^"]* '"'
+SingleQuotedString = "'" [^']* "'"
+
+Integer = [0-9]+ & ([\s] / EOF)
+Date = [0-9] [0-9] [0-9] [0-9] "-" [0-9] [0-9]? "-" [0-9] [0-9]?
+Float = [0-9]+ '.' [0-9]+
+
+EOF = ! . ""

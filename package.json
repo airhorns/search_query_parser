@@ -1,0 +1,20 @@
+{
+  "author": "Harry Brundage <harry.brundage@jadedpixel.com>",
+  "name": "search_query_parser",
+  "description": "A parser and serializer for Shopify's SearchQuery string format",
+  "version": "0.1.0",
+  "repository": {
+    "url": ""
+  },
+  "engines": {
+    "node": ">= 0.4 && < 0.7"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "language": "0.1.0",
+    "batman": ">=0.8.0",
+    "muffin": "~> 0.2",
+    "nodeunit": "~> 0.6",
+    "glob": "~> 2.0"
+  }
+}
