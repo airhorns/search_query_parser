@@ -1,14 +1,10 @@
-muffin = require 'muffin'
-glob   = require 'glob'
-{exec} = require 'child_process'
+muffin     = require 'muffin'
+glob       = require 'glob'
+q          = require 'q'
+{exec}     = require 'child_process'
 
 option '-w', '--watch', 'continue to watch the files and rebuild them when they change'
 option '-c', '--commit', 'operate on the git index instead of the working tree'
-option '-d', '--compare', 'compare to git refs (stat task only)'
-
-# Path to binary ragel from https://github.com/dominicmarks/ragel-js
-# Need this because vanilla ragel doesn't compile to JS
-RAGEL_PATH = "~/Code/ragel-js/ragel-svn/ragel/ragel"
 
 compileLanguage = (file, destination) ->
   [child, promise] = muffin.exec("language -g #{file} > #{destination}")
@@ -19,21 +15,35 @@ compileRagel = (file, destination) ->
   [child, promise] = muffin.exec(cmd)
   promise.then(-> console.log "Compiled ragel file #{file} successfully.")
 
+wrapWithExports = (source) ->
+  "(function(){var module = {exports: {}}; var exports = module.exports; #{source}; return module.exports;})()"
+
 task 'build', 'compile search_query', (options) ->
   muffin.run
     files: './src/**/*'
     options: options
     map:
       'src/(.+).coffee'              : (matches) -> muffin.compileScript(matches[0], "lib/#{matches[1]}.js", options)
-      'src/language/search_query.rl' : (matches) -> compileRagel(matches[0], "lib/rl_basic_parser.js")
-      'src/language/search_query.language'   : (matches) -> compileLanguage(matches[0], "lib/lg_basic_parser.js")
+      'src/search_query.rl'          : (matches) -> compileRagel(matches[0], "lib/rl_basic_parser.js")
+      'src/search_query.language'    : (matches) -> compileLanguage(matches[0], "lib/basic_parser.js")
+    after: ->
+      distDestination = "lib/dist/search_query_parser.js"
+      basic = muffin.readFile "lib/basic_parser.js", options
+      augmented = muffin.readFile 'lib/search_query_parser.js', options
+      q.join basic, augmented, (basicSource, augmentedSource) ->
+        basicSource = wrapWithExports(basicSource)
+        augmentedSource = wrapWithExports(augmentedSource)
+        augmentedSource = augmentedSource.replace "require('./basic_parser')", basicSource
+        augmentedSource = "window.SearchQueryParser = #{augmentedSource};"
+        muffin.writeFile(distDestination, augmentedSource).then ->
+          muffin.notify(distDestination, "Compiled and concatenated #{distDestination}.")
 
 task 'build:language_visualizer', 'compile the PEG into the language visualizer', (options) ->
   muffin.run
     files: './src/**/*'
     options: options
     map:
-      'src/language/(.+).language'   : (matches) ->
+      'src/(.+).language'   : (matches) ->
         [child, promise] = muffin.exec "language -g #{matches[0]} --browser=Parser > ~/Code/language/LanguageVisualizer/parser.js"
         child.stdin.end()
         promise.then(-> console.log "Compiled language #{matches[0]} to LanguageVisualizer destination.")
@@ -51,14 +61,3 @@ task 'test', 'run the test suite', (options) ->
     after: ->
       tests = glob.globSync('./test/**/*_test.coffee')
       runner.run tests
-
-task 'stats', 'print source code stats', (options) ->
-  muffin.statFiles(glob.globSync('./src/**/*').concat(glob.globSync('./lib/**/*')), options)
-
-task 'doc', 'autogenerate docco anotated source', (options) ->
-  muffin.run
-    files: './src/**/*'
-    options: options
-    map:
-      'src/search_query_parser.coffee'       : (matches) -> muffin.doccoFile(matches[0], options)
-

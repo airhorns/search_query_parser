@@ -1,6 +1,6 @@
-Parser = require './lg_basic_parser'
+Parser = require './basic_parser'
 
-class LgSearchQueryParser extends Parser
+class SearchQueryParser
 
   @TOKEN_TO_OPERATOR:
     less_than: '<'
@@ -104,4 +104,4 @@ class LgSearchQueryParser extends Parser
         result.push "#{key}:#{@TOKEN_TO_OPERATOR[operator]}#{value}"
     result
 
-module.exports = LgSearchQueryParser
+module.exports = SearchQueryParser
