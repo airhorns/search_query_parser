@@ -19,7 +19,6 @@ class SearchQueryParser
     less_than: 'greater_than'
     equals: 'not_equals'
     not_equals: 'equals'
-    not_equals: 'equals'
     greater_than_or_equals: 'less_than_or_equals'
     less_than_or_equals: 'greater_than_or_equals'
 

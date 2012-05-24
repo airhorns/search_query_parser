@@ -12,10 +12,9 @@
   "dependencies": {},
   "devDependencies": {
     "language": "0.1.0",
-    "batman": ">=0.8.0",
-    "muffin": "~> 0.2",
-    "nodeunit": "~> 0.6",
-    "glob": "~> 2.0",
+    "muffin": "~> 0.5.0",
+    "nodeunit": "~> 0.7.0",
+    "glob": "~>3.0.0",
     "q": ">=0"
   }
 }

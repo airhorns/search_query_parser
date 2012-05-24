@@ -30,7 +30,7 @@ task 'build', 'compile search_query', (options) ->
       distDestination = "lib/dist/search_query_parser.js"
       basic = muffin.readFile "lib/basic_parser.js", options
       augmented = muffin.readFile 'lib/search_query_parser.js', options
-      q.join basic, augmented, (basicSource, augmentedSource) ->
+      q.all([basic, augmented]).spread (basicSource, augmentedSource) ->
         basicSource = wrapWithExports(basicSource)
         augmentedSource = wrapWithExports(augmentedSource)
         augmentedSource = augmentedSource.replace "require('./basic_parser')", basicSource
@@ -59,5 +59,5 @@ task 'test', 'run the test suite', (options) ->
      'test/(.+)_test.coffee'   : (matches) ->
      'test/test_helper.coffee' : (matches) ->
     after: ->
-      tests = glob.globSync('./test/**/*_test.coffee')
+      tests = glob.sync('./test/**/*_test.coffee')
       runner.run tests
