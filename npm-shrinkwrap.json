@@ -1,0 +1,200 @@
+{
+  "name": "search_query_parser",
+  "version": "0.2.0",
+  "dependencies": {
+    "language": {
+      "version": "0.1.0",
+      "from": "git://github.com/tolmasky/language.git#53f75464902bae56712f79a30015a0b87336a17c"
+    },
+    "q": {
+      "version": "0.8.5"
+    },
+    "glob": {
+      "version": "3.0.1",
+      "dependencies": {
+        "fast-list": {
+          "version": "1.0.2"
+        },
+        "minimatch": {
+          "version": "0.1.5",
+          "dependencies": {
+            "lru-cache": {
+              "version": "1.0.6"
+            }
+          }
+        },
+        "graceful-fs": {
+          "version": "1.1.8"
+        },
+        "inherits": {
+          "version": "1.0.0"
+        }
+      }
+    },
+    "muffin": {
+      "version": "0.5.0",
+      "dependencies": {
+        "q-fs": {
+          "version": "0.1.24",
+          "dependencies": {
+            "q": {
+              "version": "0.8.2",
+              "dependencies": {
+                "event-queue": {
+                  "version": "0.2.0"
+                }
+              }
+            },
+            "qq": {
+              "version": "0.3.4"
+            },
+            "q-io": {
+              "version": "0.0.12"
+            },
+            "fs-boot": {
+              "version": "0.0.8"
+            }
+          }
+        },
+        "docco": {
+          "version": "0.3.0"
+        },
+        "coffee-script": {
+          "version": "1.3.3"
+        },
+        "uglify-js": {
+          "version": "1.2.6"
+        },
+        "prompt": {
+          "version": "0.1.12",
+          "dependencies": {
+            "async": {
+              "version": "0.1.21"
+            },
+            "colors": {
+              "version": "0.6.0-1"
+            },
+            "pkginfo": {
+              "version": "0.2.3"
+            },
+            "winston": {
+              "version": "0.5.11",
+              "dependencies": {
+                "eyes": {
+                  "version": "0.1.7"
+                },
+                "loggly": {
+                  "version": "0.3.11",
+                  "dependencies": {
+                    "request": {
+                      "version": "2.9.202"
+                    },
+                    "timespan": {
+                      "version": "2.2.0"
+                    }
+                  }
+                },
+                "stack-trace": {
+                  "version": "0.0.6"
+                }
+              }
+            }
+          }
+        },
+        "temp": {
+          "version": "0.4.0"
+        },
+        "snockets": {
+          "version": "1.3.6",
+          "dependencies": {
+            "dep-graph": {
+              "version": "1.1.0",
+              "dependencies": {
+                "underscore": {
+                  "version": "1.2.1"
+                }
+              }
+            },
+            "mime": {
+              "version": "1.2.2"
+            },
+            "uglify-js": {
+              "version": "1.0.7"
+            },
+            "underscore": {
+              "version": "1.1.7"
+            }
+          }
+        }
+      }
+    },
+    "nodeunit": {
+      "version": "0.7.4",
+      "dependencies": {
+        "tap": {
+          "version": "0.2.5",
+          "dependencies": {
+            "inherits": {
+              "version": "1.0.0"
+            },
+            "yamlish": {
+              "version": "0.0.5"
+            },
+            "slide": {
+              "version": "1.1.3"
+            },
+            "runforcover": {
+              "version": "0.0.2",
+              "dependencies": {
+                "bunker": {
+                  "version": "0.1.2",
+                  "dependencies": {
+                    "burrito": {
+                      "version": "0.2.11",
+                      "dependencies": {
+                        "traverse": {
+                          "version": "0.5.2"
+                        },
+                        "uglify-js": {
+                          "version": "1.0.7"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "nopt": {
+              "version": "1.0.10",
+              "dependencies": {
+                "abbrev": {
+                  "version": "1.0.3"
+                }
+              }
+            },
+            "mkdirp": {
+              "version": "0.3.2"
+            },
+            "difflet": {
+              "version": "0.2.1",
+              "dependencies": {
+                "traverse": {
+                  "version": "0.6.1"
+                },
+                "charm": {
+                  "version": "0.0.8"
+                }
+              }
+            },
+            "deep-equal": {
+              "version": "0.0.0"
+            },
+            "buffer-equal": {
+              "version": "0.0.0"
+            }
+          }
+        }
+      }
+    }
+  }
+}

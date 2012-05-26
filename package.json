@@ -11,7 +11,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "language": "0.1.0",
+    "language": "git://github.com/tolmasky/language.git#53f75464902bae56712f79a30015a0b87336a17c",
     "muffin": "~> 0.5.0",
     "nodeunit": "~> 0.7.0",
     "glob": "~>3.0.0",
