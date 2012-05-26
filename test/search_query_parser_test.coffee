@@ -22,177 +22,205 @@ ILLEGAL_CHARACTER                        = 'john@doe.com'
 
 exports['identifier retreival'] = nodeunit.testCase
   "test name": (test) ->
-    test.deepEqual [
+    tokens = [
       ['default', 'equals', "bruce"],
       ['default', 'equals',  'williams']
-    ], SearchQueryParser.tokenize(NAME)
+    ]
+    test.deepEqual tokens, SearchQueryParser.tokenize(NAME)
+    test.equal NAME, SearchQueryParser.build(tokens)
     test.done()
 
   "name and age": (test) ->
-    test.deepEqual [
+    tokens = [
       ['default', 'equals', "bruce"],
       ['default', 'equals',  'williams'],
       ['age', 'equals',  16]
-    ], SearchQueryParser.tokenize(NAME_AND_AGE)
+    ]
+    test.deepEqual tokens, SearchQueryParser.tokenize(NAME_AND_AGE)
+    test.equal NAME_AND_AGE, SearchQueryParser.build(tokens)
     test.done()
 
   "name and age minimum value": (test) ->
-    test.deepEqual [
+    tokens = [
       ['default', 'equals', "john"],
       ['age', 'less_than', 16]
-    ], SearchQueryParser.tokenize(GROUPED_NAMES_AND_AGE_WITH_MIN)
+    ]
+    test.deepEqual tokens, SearchQueryParser.tokenize(GROUPED_NAMES_AND_AGE_WITH_MIN)
+    test.equal GROUPED_NAMES_AND_AGE_WITH_MIN, SearchQueryParser.build(tokens)
     test.done()
 
   "name and age greater or equal value": (test) ->
-    test.deepEqual [
+    tokens = [
       ['default', 'equals', "john"],
       ['age', 'greater_than_or_equals', 16]
-    ], SearchQueryParser.tokenize(GROUPED_NAMES_AND_AGE_WITH_MAX_OR_EQUALS)
+    ]
+    test.deepEqual tokens, SearchQueryParser.tokenize(GROUPED_NAMES_AND_AGE_WITH_MAX_OR_EQUALS)
+    test.equal GROUPED_NAMES_AND_AGE_WITH_MAX_OR_EQUALS, SearchQueryParser.build(tokens)
     test.done()
 
   "name and age minimum value and negative match": (test) ->
-    test.deepEqual [
+    tokens = [
       ['default', 'equals', "john"],
       ['age', 'less_than', 16]
-    ], SearchQueryParser.tokenize(GROUPED_NAMES_AND_AGE_WITH_NEG_MATCH_MIN)
+    ]
+    test.deepEqual tokens, SearchQueryParser.tokenize(GROUPED_NAMES_AND_AGE_WITH_NEG_MATCH_MIN)
+    test.equal GROUPED_NAMES_AND_AGE_WITH_MIN, SearchQueryParser.build(tokens)
     test.done()
 
   "name min age and city": (test) ->
-    test.deepEqual [
+    tokens = [
       ['default', 'equals', "bruce"],
       ['age', 'greater_than', 16],
       ['city', 'equals', 'austin']
-    ], SearchQueryParser.tokenize(NAME_MIN_AGE_AND_CITY)
+    ]
+    test.deepEqual tokens, SearchQueryParser.tokenize(NAME_MIN_AGE_AND_CITY)
+    test.equal NAME_MIN_AGE_AND_CITY, SearchQueryParser.build(tokens)
     test.done()
 
   "grouped default keywords": (test) ->
-    results = SearchQueryParser.tokenize(GROUPED_NAMES_AND_AGE)
-    test.deepEqual [
+    tokens = [
       ['default', 'equals', "coda"],
       ['default', 'equals', "bruce"],
       ['default', 'equals', "hale"],
       ['default', 'equals', "williams"],
       ["age", 'equals', 16]
-    ], results
+    ]
+    test.deepEqual tokens, SearchQueryParser.tokenize(GROUPED_NAMES_AND_AGE)
+    test.equal "coda bruce hale williams age:16", SearchQueryParser.build(tokens)
     test.done()
 
   "unquoted keyword term": (test) ->
-    results = SearchQueryParser.tokenize(NAME_AND_AGE)
-    test.deepEqual [
+    tokens = [
       ['default', 'equals', "bruce"],
       ['default', 'equals', "williams"],
       ["age", 'equals', 16],
-    ], results
+    ]
+    test.deepEqual tokens, SearchQueryParser.tokenize(NAME_AND_AGE)
+    test.equal NAME_AND_AGE, SearchQueryParser.build(tokens)
     test.done()
 
   "single digit attribute": (test) ->
-    results = SearchQueryParser.tokenize(SINGLE_DIGIT_ATTRIBUTE)
-    test.deepEqual [
+    tokens = [
       ['default', 'equals', "john"],
       ["total_orders", 'greater_than', 5],
-    ], results
+    ]
+    test.deepEqual tokens, SearchQueryParser.tokenize(SINGLE_DIGIT_ATTRIBUTE)
+    test.equal SINGLE_DIGIT_ATTRIBUTE, SearchQueryParser.build(tokens)
     test.done()
 
   "multi single digit attribute": (test) ->
-    results = SearchQueryParser.tokenize(NAME_AND_MONEY)
-    test.deepEqual [
+    tokens = [
       ['default', 'equals', "john"],
       ["total_orders", 'greater_than', "$5"],
-    ], results
+    ]
+    test.deepEqual tokens, SearchQueryParser.tokenize(NAME_AND_MONEY)
+    test.equal NAME_AND_MONEY, SearchQueryParser.build(tokens)
     test.done()
 
   "quoted default keyword term": (test) ->
-    results = SearchQueryParser.tokenize(NAME_QUOTED_AND_AGE)
-    test.deepEqual [
+    tokens = [
       ['default', 'equals', "bruce williams"],
       ["age", 'equals', 16]
-    ], results
+    ]
+    test.deepEqual tokens, SearchQueryParser.tokenize(NAME_QUOTED_AND_AGE)
+    test.equal NAME_QUOTED_AND_AGE, SearchQueryParser.build(tokens)
     test.done()
 
   "qouted keyword term": (test) ->
-    results = SearchQueryParser.tokenize(NAME_AND_QUOTED_AGE)
-    test.deepEqual [
+    tokens = [
       ['default', 'equals', "bruce"],
       ['default', 'equals', "williams"],
       ["age", 'equals', 16]
-    ], results
+    ]
+    test.deepEqual tokens, SearchQueryParser.tokenize(NAME_AND_QUOTED_AGE)
+    test.equal NAME_AND_QUOTED_AGE, SearchQueryParser.build(tokens)
     test.done()
 
   "quoted keyword term with whitespace": (test) ->
-    results = SearchQueryParser.tokenize(DEFAULT_AGE_WITH_QUOTED_AGE)
-    test.deepEqual [
+    tokens = [
       ['default', 'equals', "16"],
       ["name", 'equals', "bruce williams"]
-    ], results
+    ]
+    test.deepEqual tokens, SearchQueryParser.tokenize(DEFAULT_AGE_WITH_QUOTED_AGE)
+    test.equal DEFAULT_AGE_WITH_QUOTED_AGE, SearchQueryParser.build(tokens)
     test.done()
 
   "single quoted keyword term with whitespace": (test) ->
-    results = SearchQueryParser.tokenize(DEFAULT_AGE_WITH_SINGLE_QUOTED_AGE)
-    test.deepEqual [
+    tokens = [
       ['default', 'equals', "16"],
       ["name", 'equals', "bruce williams"]
-    ], results
+    ]
+    test.deepEqual tokens, SearchQueryParser.tokenize(DEFAULT_AGE_WITH_SINGLE_QUOTED_AGE)
+    test.equal '16 name:"bruce williams"', SearchQueryParser.build(tokens)
     test.done()
 
   "nested single quote is accumulated": (test) ->
-    results = SearchQueryParser.tokenize(NAME_WITH_NESTED_SINGLE_QUOTES)
-    test.deepEqual [
+    tokens = [
       ['default', 'equals', "d'arcy d'uberville"],
       ["age", 'equals', 16]
-    ], results
+    ]
+    test.deepEqual tokens, SearchQueryParser.tokenize(NAME_WITH_NESTED_SINGLE_QUOTES)
+    test.equal NAME_WITH_NESTED_SINGLE_QUOTES, SearchQueryParser.build(tokens)
     test.done()
 
   "nested double quote is accumulated": (test) ->
-    results = SearchQueryParser.tokenize("""'he was called "jake"'""")
-    test.deepEqual [
+    tokens = [
       ['default', 'equals', 'he was called "jake"']
-    ], results
+    ]
+    test.deepEqual tokens, SearchQueryParser.tokenize("""'he was called "jake"'""")
+    test.equal '"he was called \"jake\""', SearchQueryParser.build(tokens)
     test.done()
 
   "bare single quote in unqouted literal is accumulated": (test) ->
-    results = SearchQueryParser.tokenize("bruce's age:16")
-    test.deepEqual [
+    tokens = [
       ['default', 'equals', "bruce's"],
       ["age", 'equals', 16]
-    ], results
+    ]
+    test.deepEqual tokens, SearchQueryParser.tokenize("bruce's age:16")
+    test.equal "bruce's age:16", SearchQueryParser.build(tokens)
     test.done()
 
-  "single quoted literal is accumuldated": (test) ->
-    results = SearchQueryParser.tokenize("foo 'bruce williams' age:16")
-    test.deepEqual [
+  "single quoted literal is accumulated": (test) ->
+    tokens = [
       ['default', 'equals', "foo"],
       ['default', 'equals', "bruce williams"],
       ["age", 'equals', 16]
-    ], results
+    ]
+    test.deepEqual tokens, SearchQueryParser.tokenize("foo 'bruce williams' age:16")
+    test.equal 'foo "bruce williams" age:16', SearchQueryParser.build(tokens)
     test.done()
 
   "period in literial is accumulated": (test) ->
-    results = SearchQueryParser.tokenize("okay... age:16")
-    test.deepEqual [
+    tokens = [
       ['default', 'equals', "okay..."],
       ["age", 'equals', 16]
-    ], results
+    ]
+    test.deepEqual tokens, SearchQueryParser.tokenize("okay... age:16")
+    test.equal "okay... age:16", SearchQueryParser.build(tokens)
     test.done()
 
   "period floating point": (test) ->
-    results = SearchQueryParser.tokenize("price:16.12")
-    test.deepEqual [
+    tokens = [
       ["price", 'equals', 16.12]
-    ], results
+    ]
+    test.deepEqual tokens, SearchQueryParser.tokenize("price:16.12")
+    test.equal "price:16.12", SearchQueryParser.build(tokens)
     test.done()
 
   "tokenize as string if integer starts with zero": (test) ->
-    results = SearchQueryParser.tokenize("zipcode:01612")
-    test.deepEqual [
+    tokens = [
       ["zipcode", 'equals', "01612"]
-    ], results
+    ]
+    test.deepEqual tokens, SearchQueryParser.tokenize("zipcode:01612")
+    test.equal "zipcode:01612", SearchQueryParser.build(tokens)
     test.done()
 
   "date parsing": (test) ->
-    results = SearchQueryParser.tokenize("order_placed:2007-01-01")
-    test.deepEqual [
+    tokens = [
       ["order_placed", 'equals', new Date("2007-01-01")]
-    ], results
+    ]
+    test.deepEqual tokens, SearchQueryParser.tokenize("order_placed:2007-01-01")
+    test.equal "order_placed:2007-01-01", SearchQueryParser.build(tokens)
     test.done()
 
   "tokenize error results in exception": (test) ->
@@ -200,17 +228,19 @@ exports['identifier retreival'] = nodeunit.testCase
     test.done()
 
   "can use apostrophes in unquoted literal": (test) ->
-    results = SearchQueryParser.tokenize("d'correct")
-    test.deepEqual [
+    tokens = [
       ['default', 'equals', "d'correct"]
-    ], results
+    ]
+    test.deepEqual tokens, SearchQueryParser.tokenize("d'correct")
+    test.equal "d'correct", SearchQueryParser.build(tokens)
     test.done()
 
   "can use apostrophes in unquoted literal values": (test) ->
-    results = SearchQueryParser.tokenize("text:d'correct")
-    test.deepEqual [
+    tokens = [
       ['text', 'equals', "d'correct"]
-    ], results
+    ]
+    test.deepEqual tokens, SearchQueryParser.tokenize("text:d'correct")
+    test.equal "text:d'correct", SearchQueryParser.build(tokens)
     test.done()
 
   "cannot use an apostrophe at the beginning on an unquoted literal": (test) ->
@@ -218,62 +248,70 @@ exports['identifier retreival'] = nodeunit.testCase
     test.done()
 
   "keywords are case sensitive": (test) ->
-    results = SearchQueryParser.tokenize("Text:justtesting")
-    test.deepEqual [
+    tokens = [
       ['Text', 'equals', "justtesting"]
-    ], results
+    ]
+    test.deepEqual tokens, SearchQueryParser.tokenize("Text:justtesting")
+    test.equal "Text:justtesting", SearchQueryParser.build(tokens)
     test.done()
 
   "values are case sensitive": (test) ->
-    results = SearchQueryParser.tokenize("Text:Big")
-    test.deepEqual [
+    tokens = [
       ['Text', 'equals', "Big"]
-    ], results
+    ]
+    test.deepEqual tokens, SearchQueryParser.tokenize("Text:Big")
+    test.equal "Text:Big", SearchQueryParser.build(tokens)
     test.done()
 
   "spaces are condensed": (test) ->
-    results = SearchQueryParser.tokenize("  this  is  some  text  ")
-    test.deepEqual [
+    tokens = [
       ['default', 'equals', "this"],
       ['default', 'equals', "is"],
       ['default', 'equals', "some"],
       ['default', 'equals', "text"]
-    ], results
+    ]
+    test.deepEqual tokens, SearchQueryParser.tokenize("  this  is  some  text  ")
+    test.equal "this is some text", SearchQueryParser.build(tokens)
     test.done()
 
   "empty search is successful": (test) ->
-    results = SearchQueryParser.tokenize("")
-    test.deepEqual [], results
+    tokens = []
+    test.deepEqual tokens, SearchQueryParser.tokenize("")
+    test.equal "", SearchQueryParser.build(tokens)
     test.done()
 
   "negative search": (test) ->
-    results = SearchQueryParser.tokenize("-site:google.com")
-    test.deepEqual [
+    tokens = [
       ["site", 'not_equals', "google.com"]
-    ], results
+    ]
+    test.deepEqual tokens, SearchQueryParser.tokenize("-site:google.com")
+    test.equal "-site:google.com", SearchQueryParser.build(tokens)
     test.done()
 
   "positive search": (test) ->
-    results = SearchQueryParser.tokenize("+site:google.com")
-    test.deepEqual [
+    tokens = [
       ["site", 'equals', "google.com"]
-    ], results
+    ]
+    test.deepEqual tokens, SearchQueryParser.tokenize("+site:google.com")
+    test.equal "site:google.com", SearchQueryParser.build(tokens)
     test.done()
 
   "positive negative search": (test) ->
-    results = SearchQueryParser.tokenize("""text -google.com search""")
-    test.deepEqual [
+    tokens = [
       ['default', 'equals', "text"],
       ['default', 'not_equals', "google.com"],
       ['default', 'equals', "search"]
-    ], results
+    ]
+    test.deepEqual tokens, SearchQueryParser.tokenize("""text -google.com search""")
+    test.equal """text -google.com search""", SearchQueryParser.build(tokens)
     test.done()
 
   "negative search to the default keyword with quotes": (test) ->
-    results = SearchQueryParser.tokenize("""-google.com""")
-    test.deepEqual [
+    tokens = [
       ['default', 'not_equals', "google.com"]
-    ], results
+    ]
+    test.deepEqual tokens, SearchQueryParser.tokenize("""-google.com""")
+    test.equal """-google.com""", SearchQueryParser.build(tokens)
     test.done()
 
   "tokenize syntax error": (test) ->
@@ -281,66 +319,11 @@ exports['identifier retreival'] = nodeunit.testCase
     test.throws -> SearchQueryParser.tokenize("""age: test""")
     test.done()
 
-  "parse": (test) ->
-    results = SearchQueryParser.parse(GROUPED_NAMES_AND_AGE)
-    expected =
-      "age": [
-        ['equals', 16]
-      ]
-    test.equal 2, Object.keys(results).length
-    test.deepEqual ["coda","bruce","hale","williams"], results.q
-    test.deepEqual expected, results.attributes
-    test.done()
-
-  "parse with range": (test) ->
-    results = SearchQueryParser.parse(GROUPED_NAMES_AND_AGE_WITH_MIN_MAX)
-    expected =
-      "age": [
-        ['greater_than', 16]
-        ['less_than', 30]
-      ]
-    test.equal 2, Object.keys(results).length
-    test.deepEqual ["john"], results.q
-    test.deepEqual expected, results.attributes
-    test.done()
-
-  "parse with multiple attributes": (test) ->
-    results = SearchQueryParser.parse(MULTIPLE_ATTRIBUTES)
-    expected = {
-      "total_orders": [
-        ['greater_than', 100]
-      ],
-      "total_spent":  [
-        ['less_than', 100.0],
-        ['greater_than', 21.5]
-      ]
-    }
-
-    test.equal 2, Object.keys(results).length
-    test.deepEqual ["john", "smith"], results.q
-    test.deepEqual expected, results.attributes
-    test.done()
-
   "name and boolean false": (test) ->
-    test.deepEqual [
+    tokens = [
       ['default', 'equals', "john"],
       ['agrees', 'equals',  0]
-    ], SearchQueryParser.tokenize(NAME_AND_BOOLEAN_FALSE)
-    test.done()
-
-  "sanitize should return sane version of query": (test) ->
-    expected = {q: 'bruce williams'}
-    test.deepEqual expected, SearchQueryParser.sanitize(NAME)
-
-    expected = {q: 'bruce williams', f: ['age:16']}
-    test.deepEqual expected, SearchQueryParser.sanitize(NAME_AND_AGE)
-
-    expected = {q: 'john', f: ['age:>16', 'age:<30']}
-    test.deepEqual expected, SearchQueryParser.sanitize(GROUPED_NAMES_AND_AGE_WITH_MIN_MAX)
-    test.done()
-
-  "illegal character should be escaped": (test) ->
-    escaped = 'john\@doe.com'
-    expected = {q: [escaped], attributes: {}}
-    test.deepEqual expected, SearchQueryParser.parse(ILLEGAL_CHARACTER)
+    ]
+    test.deepEqual tokens, SearchQueryParser.tokenize(NAME_AND_BOOLEAN_FALSE)
+    test.equal NAME_AND_BOOLEAN_FALSE, SearchQueryParser.build(tokens)
     test.done()

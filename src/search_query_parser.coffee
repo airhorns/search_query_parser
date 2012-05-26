@@ -8,6 +8,7 @@ class SearchQueryParser
     greater_than: '>'
     greater_than_or_equals: '>='
     equals: ''
+    not_equals: ''
 
   @OPERATOR_TO_TOKEN: {}
 
@@ -78,29 +79,39 @@ class SearchQueryParser
 
     results
 
-  @parse: (input) ->
-    q = []
-    attributes = {}
-    for [key, opt, value] in @tokenize(input)
-      if key is 'default'
-        q.push value
+  @build: (tokens) ->
+    results = []
+    for [key, operator, value] in tokens
+      component = "#{@TOKEN_TO_OPERATOR[operator]}#{@format(value)}"
+      if key != 'default'
+        component = "#{key}:#{component}"
+      if operator == 'not_equals'
+        component = "-#{component}"
+      results.push component
+
+    results.join ' '
+
+  pad = (val) ->
+    val = "#{val}"
+    if val.length == 1
+      val = "0#{val}"
+    val
+
+  @format: (value) ->
+    if value instanceof Date
+      return "#{value.getUTCFullYear()}-#{pad value.getUTCMonth()+1}-#{pad value.getUTCDate()}"
+
+    if value.indexOf? && value.indexOf(' ') != -1
+      startCharacter = value.slice(0, 1)
+      endCharacter = value.slice(-1)
+      if startCharacter == endCharacter
+        switch startCharacter
+          when "'"
+            value.replace(/'/g, "'")
+          when '"'
+            value.replace(/"/g, '"')
       else
-        (attributes[key] || = []).push([opt, value])
-    {q, attributes}
-
-  @sanitize: (query) ->
-    params = @parse(query)
-    filters = @attributesToFilters(params.attributes)
-    results = {}
-    results.q = params.q.join(' ') if params.q.length
-    results.f = filters if filters.length
-    results
-
-  @attributesToFilters: (attributes) ->
-    result = []
-    for key, tuples of attributes
-      for [operator, value] in tuples
-        result.push "#{key}:#{@TOKEN_TO_OPERATOR[operator]}#{value}"
-    result
-
+        value.replace(/"/g, '"')
+        value = "\"#{value}\""
+    value
 module.exports = SearchQueryParser
