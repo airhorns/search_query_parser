@@ -79,12 +79,21 @@ class SearchQueryParser
 
     results
 
+  quote = (val) ->
+    return val unless val.indexOf(' ') > -1
+    return val if val.substr(0, 1) == '"' && component.substr(-1) == '"'
+    '"' + val + '"'
+
   @build: (tokens) ->
     results = []
     for [key, operator, value] in tokens
       component = "#{@TOKEN_TO_OPERATOR[operator]}#{@format(value)}"
-      if key != 'default'
-        component = "#{key}:#{component}"
+
+      if key == 'default'
+        component = quote component
+      else
+        component = "#{key}:#{quote component}"
+
       if operator == 'not_equals'
         component = "-#{component}"
       results.push component
@@ -112,6 +121,5 @@ class SearchQueryParser
             value.replace(/"/g, '"')
       else
         value.replace(/"/g, '"')
-        value = "\"#{value}\""
     value
 module.exports = SearchQueryParser
