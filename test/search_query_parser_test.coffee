@@ -20,7 +20,7 @@ NAME_AND_BOOLEAN_FALSE                   = 'john agrees:0'
 NAME_AND_MONEY                           = 'john total_orders:>$5'
 ILLEGAL_CHARACTER                        = 'john@doe.com'
 
-exports['identifier retreival'] = nodeunit.testCase
+exports['identifier retrieval'] = nodeunit.testCase
   "test name": (test) ->
     tokens = [
       ['default', 'equals', "bruce"],
