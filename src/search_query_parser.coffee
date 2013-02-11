@@ -81,7 +81,7 @@ class SearchQueryParser
 
   quote = (val) ->
     return val unless val.indexOf(' ') > -1
-    return val if val.substr(0, 1) == '"' && component.substr(-1) == '"'
+    return val if val.substr(0, 1) == '"' && val.substr(-1) == '"'
     '"' + val + '"'
 
   @build: (tokens) ->
