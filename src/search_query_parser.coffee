@@ -114,12 +114,14 @@ class SearchQueryParser
       startCharacter = value.slice(0, 1)
       endCharacter = value.slice(-1)
       if startCharacter == endCharacter
+        coreValue = value.slice(1, -1)
         switch startCharacter
           when "'"
-            value.replace(/'/g, "'")
+            "'" + coreValue.replace(/'/g, "\\'") + "'"
           when '"'
-            value.replace(/"/g, '"')
+            '"' + coreValue.replace(/"/g, '\\"') + '"'
       else
-        value.replace(/"/g, '"')
-    value
+        '"' + value.replace(/"/g, '\"') + '"'
+    else
+      value
 module.exports = SearchQueryParser
