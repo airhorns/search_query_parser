@@ -7,7 +7,7 @@ option '-w', '--watch', 'continue to watch the files and rebuild them when they 
 option '-c', '--commit', 'operate on the git index instead of the working tree'
 
 compileLanguage = (file, destination) ->
-  [child, promise] = muffin.exec("language -g #{file} > #{destination}")
+  [child, promise] = muffin.exec("./node_modules/language/bin/language -g #{file} > #{destination}")
   promise.then(-> console.log "Compiled language #{file} successfully.")
 
 compileRagel = (file, destination) ->
@@ -44,7 +44,7 @@ task 'build:language_visualizer', 'compile the PEG into the language visualizer'
     options: options
     map:
       'src/(.+).language'   : (matches) ->
-        [child, promise] = muffin.exec "language -g #{matches[0]} --browser=Parser > ~/Code/language/LanguageVisualizer/parser.js"
+        [child, promise] = muffin.exec "./node_modules/language/bin/language -g #{matches[0]} --browser=Parser > ~/Code/language/LanguageVisualizer/parser.js"
         child.stdin.end()
         promise.then(-> console.log "Compiled language #{matches[0]} to LanguageVisualizer destination.")
 

@@ -19,8 +19,9 @@ SINGLE_DIGIT_ATTRIBUTE                   = 'john total_orders:>5'
 NAME_AND_BOOLEAN_FALSE                   = 'john agrees:0'
 NAME_AND_MONEY                           = 'john total_orders:>$5'
 ILLEGAL_CHARACTER                        = 'john@doe.com'
+QUOTED_COUNTRY                           = 'country:"United States"'
 
-exports['identifier retreival'] = nodeunit.testCase
+exports['identifier retrieval'] = nodeunit.testCase
   "test name": (test) ->
     tokens = [
       ['default', 'equals', "bruce"],
@@ -143,6 +144,15 @@ exports['identifier retreival'] = nodeunit.testCase
     ]
     test.deepEqual tokens, SearchQueryParser.tokenize(DEFAULT_AGE_WITH_QUOTED_AGE)
     test.equal DEFAULT_AGE_WITH_QUOTED_AGE, SearchQueryParser.build(tokens)
+    test.done()
+
+  "quoted country with witespace": (test) ->
+    tokens = [
+      ['country', 'equals', 'United States']
+    ]
+
+    test.deepEqual tokens, SearchQueryParser.tokenize(QUOTED_COUNTRY)
+    test.equal QUOTED_COUNTRY, SearchQueryParser.build(tokens)
     test.done()
 
   "single quoted keyword term with whitespace": (test) ->
