@@ -19,6 +19,7 @@ SINGLE_DIGIT_ATTRIBUTE                   = 'john total_orders:>5'
 NAME_AND_BOOLEAN_FALSE                   = 'john agrees:0'
 NAME_AND_MONEY                           = 'john total_orders:>$5'
 ILLEGAL_CHARACTER                        = 'john@doe.com'
+MIXED_FLOAT_STRING                       = 'something:10.01_broken'
 
 exports['identifier retreival'] = nodeunit.testCase
   "test name": (test) ->
@@ -326,4 +327,12 @@ exports['identifier retreival'] = nodeunit.testCase
     ]
     test.deepEqual tokens, SearchQueryParser.tokenize(NAME_AND_BOOLEAN_FALSE)
     test.equal NAME_AND_BOOLEAN_FALSE, SearchQueryParser.build(tokens)
+    test.done()
+
+  "tokenize handles floats mixed with strings": (test) ->
+    tokens = [
+      ['something', 'equals', '10.01_broken']
+    ]
+    test.deepEqual tokens, SearchQueryParser.tokenize(MIXED_FLOAT_STRING)
+    test.equal MIXED_FLOAT_STRING, SearchQueryParser.build(tokens)
     test.done()
